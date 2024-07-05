@@ -1,0 +1,55 @@
+name: Build kernel deb packages
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build kernel
+    runs-on: ubuntu-latest
+    container: debian:buster
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: add deb-src to sources.list
+        run: |
+          sed -i "/deb-src/s/# //g" /etc/apt/sources.list
+      - name: install dep
+        run: |
+          apt update
+          apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
+          apt build-dep -y linux
+      - name: download kernel source
+        run: |
+          wget http://www.kernel.org/pub/linux/kernel/v6.x/linux-6.7.8.tar.xz
+          tar -xvf linux-6.7.8.tar.xz
+      - name: copy config file
+        run: |
+          cp config ./linux-6.7.8/.config
+      - name: disable DEBUG_INFO to speedup build
+        run: |
+          scripts/config --disable DEBUG_INFO
+      - name: build deb packages
+        run: |
+          CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
+          make deb-pkg -j"$CPU_CORES"
+      - name: move deb packages to artifact dir
+        run: |
+          mkdir ${{ github.workspace }}/artifact
+          find ${{ github.workspace }} -name "*dbg*.deb" -exec rm -rfv {} \;
+          find ${{ github.workspace }} -name "*.deb" -exec mv {} ${{ github.workspace }}/artifact \;
+          tar acvf artifact.tar ${{ github.workspace }}/artifact
+
+      - name: Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact
+          path: ${{ github.workspace }}/artifact.tar
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ github.workspace }}/artifact.tar
+          tag_name: latest_release
+          name: kernel
