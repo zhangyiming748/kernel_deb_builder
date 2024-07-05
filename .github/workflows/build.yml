@@ -18,3 +18,12 @@ jobs:
         with:
           name: artifact
           path: ${{ github.workspace }}/artifact/
+      - name: Archive
+        run: tar acvf artifact.tar ${{ github.workspace }}/artifact
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ github.workspace }}/artifact.tar
+          tag_name: latest_release
+          name: kernel
