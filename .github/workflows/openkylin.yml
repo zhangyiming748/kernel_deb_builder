@@ -78,11 +78,11 @@ jobs:
           cd ${{ env.KERNEL_VERSION }}
           pwd
           make oldconfig
-          DEB_BUILD_OPTIONS=no_dbg make CCACHE_DISABLE=1 deb-pkg -j
+          make CCACHE_DISABLE=1 deb-pkg -j
       - name: move deb packages to artifact dir
         run: |
           mkdir ${{ github.workspace }}/artifact
-#          find ${{ github.workspace }} -name "*dbg*.deb" -exec rm -rfv {} \;
+          find ${{ github.workspace }} -name "*dbg*.deb" -exec rm -rfv {} \;
           find ${{ github.workspace }} -name "*.deb" -exec mv {} ${{ github.workspace }}/artifact \;
           tar acvf artifact.tar ${{ github.workspace }}/artifact
       - name: Artifact
