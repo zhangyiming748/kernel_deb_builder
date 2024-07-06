@@ -1,0 +1,27 @@
+name: Build kernel deb packages for openkylin
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - main
+      - openkylin
+  workflow_dispatch:
+env:
+  KERNEL_VERSION: linux-6.9.8
+  DEBIAN_FRONTEND: noninteractiv
+jobs:
+  build:
+    name: Build kernel for openkylin
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:focal
+      volumes:
+        - /tmp:/tmp
+    steps:
+      - name: Optimize apt cache
+        run: |
+          apt update
+          apt install ncdu -y
+          ncdu /tmp
+          rm -rf /var/lib/apt/lists/*
