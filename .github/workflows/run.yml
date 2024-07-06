@@ -21,7 +21,7 @@ jobs:
         run: |
           apt update
           apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
-          sapt build-dep -y linux
+          apt build-dep -y linux
       - name: download kernel source
         run: |
           pwd
