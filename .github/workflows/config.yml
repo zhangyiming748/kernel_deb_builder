@@ -30,9 +30,4 @@ jobs:
         run: rm -rf /opt/hostedtoolcache
       - name: Optimize apt cache
         run: |
-          apt update
-          apt install ncdu -y
           df -h
-          cd /tmp
-          du -h
-          rm -rf /var/lib/apt/lists/*
