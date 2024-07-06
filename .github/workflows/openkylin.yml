@@ -13,7 +13,7 @@ jobs:
   build:
     name: Build kernel for openkylin
     runs-on: ubuntu-latest
-    container: ubuntu:minimal
+    container: ubuntu:focal
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -78,11 +78,11 @@ jobs:
           cd ${{ env.KERNEL_VERSION }}
           pwd
           make oldconfig
-          make deb-pkg -j
+          DEB_BUILD_OPTIONS=no_dbg make CCACHE_DISABLE=1 deb-pkg -j
       - name: move deb packages to artifact dir
         run: |
           mkdir ${{ github.workspace }}/artifact
-          find ${{ github.workspace }} -name "*dbg*.deb" -exec rm -rfv {} \;
+#          find ${{ github.workspace }} -name "*dbg*.deb" -exec rm -rfv {} \;
           find ${{ github.workspace }} -name "*.deb" -exec mv {} ${{ github.workspace }}/artifact \;
           tar acvf artifact.tar ${{ github.workspace }}/artifact
       - name: Artifact
