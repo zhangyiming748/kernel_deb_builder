@@ -46,7 +46,8 @@ jobs:
           git commit -m "1"
       - name: build deb packages
         run: |
-          cd ${{ github.workspace }}/linux-6.9.8
+          cd linux-6.9.8
+          pwd
           make oldconfig
           make deb-pkg -j
       - name: move deb packages to artifact dir
