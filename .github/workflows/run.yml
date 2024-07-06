@@ -1,4 +1,4 @@
-name: Build kernel deb packages
+name: Build kernel deb packages yml
 on:
   push:
     branches:
@@ -6,9 +6,8 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    name: Build kernel
+    name: Build kernel by yml
     runs-on: ubuntu-latest
-    container: debian:buster
     steps:
       - name: Checkout
         uses: actions/checkout@v4
