@@ -29,6 +29,8 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
+      - name: saveSpace
+        run: rm -rf /opt/hostedtoolcache
       - name: Checkout
         uses: actions/checkout@v4
       - name: add deb-src to sources.list
@@ -41,6 +43,8 @@ jobs:
           apt update
           apt install -y libncurses-dev pkg-config wget git xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
           apt build-dep -y linux
+          apt autoremove -y
+          apt clean -y
       - name: download kernel source
         run: |
           pwd
@@ -85,5 +89,5 @@ jobs:
         with:
           files: |
             ${{ github.workspace }}/artifact.tar
-          tag_name: latest_release
+          tag_name: openkylin
           name: kernel
