@@ -22,11 +22,11 @@ jobs:
           apt build-dep -y linux
       - name: download kernel source
         run: |
-          wget http://www.kernel.org/pub/linux/kernel/v6.x/linux-6.7.8.tar.xz
-          tar -xvf linux-6.7.8.tar.xz
+          wget http://www.kernel.org/pub/linux/kernel/v6.x/linux-6.9.8.tar.xz
+          tar -xvf linux-6.9.8.tar.xz
       - name: copy config file
         run: |
-          cp config ./linux-6.7.8/.config
+          cp config ./linux-6.9.8/.config
       - name: disable DEBUG_INFO to speedup build
         run: |
           scripts/config --disable DEBUG_INFO
@@ -40,7 +40,6 @@ jobs:
           find ${{ github.workspace }} -name "*dbg*.deb" -exec rm -rfv {} \;
           find ${{ github.workspace }} -name "*.deb" -exec mv {} ${{ github.workspace }}/artifact \;
           tar acvf artifact.tar ${{ github.workspace }}/artifact
-
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:

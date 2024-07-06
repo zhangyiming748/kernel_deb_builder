@@ -18,7 +18,7 @@ cd "${GITHUB_WORKSPACE}" || exit
 
 # download kernel source
 wget http://www.kernel.org/pub/linux/kernel/v6.x/linux-"$VERSION".tar.xz
-tar -xf linux-"$VERSION".tar.xz
+tar -xvf linux-"$VERSION".tar.xz
 cd linux-"$VERSION" || exit
 
 # copy config file
@@ -29,7 +29,7 @@ scripts/config --disable DEBUG_INFO
 
 # apply patches
 # shellcheck source=src/util.sh
-source ../patch.d/*.sh
+# source ../patch.d/*.sh
 
 # build deb packages
 CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
