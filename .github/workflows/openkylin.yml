@@ -13,7 +13,7 @@ jobs:
   build:
     name: Build kernel for openkylin
     runs-on: ubuntu-latest
-    container: ubuntu:focal
+    container: ubuntu:minimal
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -45,6 +45,10 @@ jobs:
           apt build-dep -y linux
           apt autoremove -y
           apt clean -y
+      - name: Optimize apt cache
+        run: |
+          apt clean -y
+          rm -rf /var/lib/apt/lists/*
       - name: download kernel source
         run: |
           pwd
@@ -60,6 +64,7 @@ jobs:
           cd ${{ env.KERNEL_VERSION }}
           pwd
           scripts/config --disable DEBUG_INFO
+          scripts/config --enable MODULE_COMPRESS
       - name: make git
         run: |
           cd ${{ env.KERNEL_VERSION }}
