@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 env:
   KERNEL_VERSION: linux-6.9.8
+  DEBIAN_FRONTEND: noninteractiv
 jobs:
   build:
     name: Build kernel for openkylin
@@ -20,7 +21,6 @@ jobs:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
           tool-cache: false
-
           # all of these default to true, but feel free to set to
           # "false" if necessary for your workflow
           android: true
@@ -39,8 +39,8 @@ jobs:
       - name: install dep
         run: |
           apt update
-          DEBIAN_FRONTEND=noninteractive apt install -y libncurses-dev pkg-config wget git xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
-          DEBIAN_FRONTEND=noninteractive apt build-dep -y linux
+          apt install -y libncurses-dev pkg-config wget git xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
+          apt build-dep -y linux
       - name: download kernel source
         run: |
           pwd
