@@ -1,4 +1,4 @@
-name: Build kernel deb packages for openkylin
+name: save space
 on:
   push:
     branches:
@@ -12,16 +12,33 @@ env:
   DEBIAN_FRONTEND: noninteractiv
 jobs:
   build:
-    name: Build kernel for openkylin
+    name: save space
     runs-on: ubuntu-latest
     container:
       image: ubuntu:focal
       volumes:
         - /tmp:/tmp
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      - name: saveSpace
+        run: rm -rf /opt/hostedtoolcache
       - name: Optimize apt cache
         run: |
           apt update
           apt install ncdu -y
-          ncdu /tmp
+          cd /tmp
+          du -h
           rm -rf /var/lib/apt/lists/*
