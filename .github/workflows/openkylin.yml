@@ -14,16 +14,21 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu:focal
     steps:
-      - name: install sudo
-        run: apt install -y sudo
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
         with:
-         # 这个值是保留给系统的空间大小，之前设置太小，总会在安装依赖或者编译过程中报设备空间不足的错误而导致编译失败
-         root-reserve-mb: 4096
-         swap-size-mb: 512
-         remove-dotnet: 'true'
-         remove-android: 'true'
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Checkout
         uses: actions/checkout@v4
       - name: add deb-src to sources.list
