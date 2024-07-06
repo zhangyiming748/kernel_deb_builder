@@ -1,12 +1,14 @@
-name: Build kernel deb packages yml
+name: Build kernel deb packages for openkylin
 on:
   push:
     branches:
-      - master
+      - dev
+      - main
+      - openkylin
   workflow_dispatch:
 jobs:
   build:
-    name: Build kernel by yml
+    name: Build kernel for openkylin
     runs-on: ubuntu-latest
     container: ubuntu:focal
     steps:
