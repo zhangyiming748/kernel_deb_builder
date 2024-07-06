@@ -19,6 +19,11 @@ jobs:
       volumes:
         - /tmp:/tmp
     steps:
+      - name: clean
+        run: |
+          apt remove -y '^aspnetcore-.*' '^dotnet-.*' '^llvm-.*' 'php.*' '^mongodb-.*' '^mysql-.*'  azure-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri
+          apt-get autoremove -y
+          apt-get clean
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
@@ -39,6 +44,7 @@ jobs:
         run: |
           apt update
           apt install ncdu -y
+          df -h
           cd /tmp
           du -h
           rm -rf /var/lib/apt/lists/*
