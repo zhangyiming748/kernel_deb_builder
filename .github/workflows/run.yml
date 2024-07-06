@@ -15,11 +15,12 @@ jobs:
         run: |
           less /etc/apt/sources.list
           sudo sed -i "/deb-src/s/# //g" /etc/apt/sources.list
+          less /etc/apt/sources.list
       - name: install dep
         run: |
-          apt update
-          apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
-          apt build-dep -y linux
+          sudo apt update
+          sudo apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
+          sudo apt build-dep -y linux
       - name: download kernel source
         run: |
           pwd
