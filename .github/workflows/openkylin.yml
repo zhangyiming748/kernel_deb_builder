@@ -6,12 +6,22 @@ on:
       - main
       - openkylin
   workflow_dispatch:
+env:
+  KERNEL_VERSION: linux-6.9.8
 jobs:
   build:
     name: Build kernel for openkylin
     runs-on: ubuntu-latest
     container: ubuntu:focal
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+         # 这个值是保留给系统的空间大小，之前设置太小，总会在安装依赖或者编译过程中报设备空间不足的错误而导致编译失败
+         root-reserve-mb: 4096
+         swap-size-mb: 512
+         remove-dotnet: 'true'
+         remove-android: 'true'
       - name: Checkout
         uses: actions/checkout@v4
       - name: add deb-src to sources.list
@@ -27,20 +37,20 @@ jobs:
       - name: download kernel source
         run: |
           pwd
-          wget http://www.kernel.org/pub/linux/kernel/v6.x/linux-6.9.8.tar.xz
+          wget http://www.kernel.org/pub/linux/kernel/v6.x/${{ env.KERNEL_VERSION }}.tar.xz
           tar -xf linux-6.9.8.tar.xz
       - name: copy config file
         run: |
           pwd
-          cp config ./linux-6.9.8/.config
+          cp config ./${{ env.KERNEL_VERSION }}/.config
       - name: disable DEBUG_INFO to speedup build
         run: |
-          cd linux-6.9.8
+          cd ${{ env.KERNEL_VERSION }}
           pwd
           scripts/config --disable DEBUG_INFO
       - name: make git
         run: |
-          cd linux-6.9.8
+          cd ${{ env.KERNEL_VERSION }}
           git init
           git add .
           git config --global user.name "Your Name"
@@ -48,7 +58,7 @@ jobs:
           git commit -m "1"
       - name: build deb packages
         run: |
-          cd linux-6.9.8
+          cd ${{ env.KERNEL_VERSION }}
           pwd
           make oldconfig
           make deb-pkg -j
