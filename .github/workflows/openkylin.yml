@@ -50,6 +50,7 @@ jobs:
           pwd
           wget http://www.kernel.org/pub/linux/kernel/v6.x/${{ env.KERNEL_VERSION }}.tar.xz
           tar -xf linux-6.9.8.tar.xz
+          rm linux-6.9.8.tar.xz
       - name: copy config file
         run: |
           pwd
