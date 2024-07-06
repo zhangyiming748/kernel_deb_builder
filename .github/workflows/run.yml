@@ -8,6 +8,7 @@ jobs:
   build:
     name: Build kernel by yml
     runs-on: ubuntu-latest
+    container: ubuntu:focal
     steps:
       - name: Checkout
         uses: actions/checkout@v4
