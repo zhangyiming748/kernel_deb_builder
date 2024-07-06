@@ -21,13 +21,7 @@ jobs:
     steps:
       - name: clean
         run: |
-          apt remove -y '^aspnetcore-.*' '^dotnet-.*' '^llvm-.*' 'php.*' '^mongodb-.*' '^mysql-.*' azure-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri google-cloud-sdk google-cloud-cli --fix-missing 
-          apt autoremove -y
-          apt clean
-          rm -rf /opt/ghc
-          rm -rf /usr/local/.ghcup
-          rm -rf /usr/share/dotnet
-          rm -rf /usr/local/lib/android
+          dpkg -l
       - name: saveSpace
         run: rm -rf /opt/hostedtoolcache
       - name: Optimize apt cache
