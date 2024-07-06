@@ -13,7 +13,10 @@ jobs:
   build:
     name: Build kernel for openkylin
     runs-on: ubuntu-latest
-    container: ubuntu:focal
+    container:
+      image: ubuntu:focal
+      volumes:
+        - /tmp:/tmp
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -40,6 +43,7 @@ jobs:
           cat /etc/apt/sources.list
       - name: install dep
         run: |
+          df -h
           apt update
           apt install -y libncurses-dev pkg-config wget git xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
           apt build-dep -y linux
@@ -51,23 +55,23 @@ jobs:
           rm -rf /var/lib/apt/lists/*
       - name: download kernel source
         run: |
-          pwd
+          cd /tmp
           wget http://www.kernel.org/pub/linux/kernel/v6.x/${{ env.KERNEL_VERSION }}.tar.xz
           tar -xf ${{ env.KERNEL_VERSION }}.tar.xz
           rm ${{ env.KERNEL_VERSION }}.tar.xz
       - name: copy config file
         run: |
           pwd
-          cp config ./${{ env.KERNEL_VERSION }}/.config
+          cp config /tmp/${{ env.KERNEL_VERSION }}/.config
       - name: disable DEBUG_INFO to speedup build
         run: |
-          cd ${{ env.KERNEL_VERSION }}
+          cd /tmp/${{ env.KERNEL_VERSION }}
           pwd
           scripts/config --disable DEBUG_INFO
           scripts/config --enable MODULE_COMPRESS
       - name: make git
         run: |
-          cd ${{ env.KERNEL_VERSION }}
+          cd /tmp/${{ env.KERNEL_VERSION }}
           git init
           git add .
           git config --global user.name "Your Name"
@@ -75,15 +79,15 @@ jobs:
           git commit -m "1"
       - name: build deb packages
         run: |
-          cd ${{ env.KERNEL_VERSION }}
+          cd /tmp/${{ env.KERNEL_VERSION }}
           pwd
           make oldconfig
           make CCACHE_DISABLE=1 deb-pkg -j
       - name: move deb packages to artifact dir
         run: |
           mkdir ${{ github.workspace }}/artifact
-          find ${{ github.workspace }} -name "*dbg*.deb" -exec rm -rfv {} \;
-          find ${{ github.workspace }} -name "*.deb" -exec mv {} ${{ github.workspace }}/artifact \;
+          find /tmp -name "*dbg*.deb" -exec rm -rfv {} \;
+          find /tmp -name "*.deb" -exec mv {} ${{ github.workspace }}/artifact \;
           tar acvf artifact.tar ${{ github.workspace }}/artifact
       - name: Artifact
         uses: actions/upload-artifact@v4
