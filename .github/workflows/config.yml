@@ -21,7 +21,6 @@ jobs:
     steps:
       - name: clean
         run: |
-          docker image prune --all --force
           apt remove -y '^aspnetcore-.*' '^dotnet-.*' '^llvm-.*' 'php.*' '^mongodb-.*' '^mysql-.*' azure-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri google-cloud-sdk google-cloud-cli --fix-missing 
           apt autoremove -y
           apt clean
