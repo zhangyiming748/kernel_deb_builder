@@ -23,6 +23,12 @@ cd linux-"$VERSION" || exit
 
 # copy config file
 cp ../config .config
+# git
+git init
+git add .
+git config --global user.name "Your Name"
+git config --global user.email "youremail@yourdomain.com"
+git commit -m "1"
 
 # disable DEBUG_INFO to speedup build
 scripts/config --disable DEBUG_INFO
