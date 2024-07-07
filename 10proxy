@@ -20,3 +20,7 @@ Acquire::http::Proxy::archive.ubuntu.com "http://192.168.1.20:8889/";
 Acquire::https::Proxy::archive.ubuntu.com "http://192.168.1.20:8889/";
 Acquire::http::Proxy::security.ubuntu.com "http://192.168.1.20:8889/";
 Acquire::https::Proxy::security.ubuntu.com "http://192.168.1.20:8889/";
+Acquire::http::Proxy::archive.canonical.com "http://192.168.1.20:8889/";
+Acquire::https::Proxy::archive.canonical.com "http://192.168.1.20:8889/";
+Acquire::http::Proxy::security.canonical.com "http://192.168.1.20:8889/";
+Acquire::https::Proxy::security.canonical.com "http://192.168.1.20:8889/";
