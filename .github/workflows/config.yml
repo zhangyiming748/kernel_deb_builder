@@ -2,7 +2,6 @@ name: save space
 on:
   push:
     branches:
-      - master
       - dev
       - main
       - openkylin

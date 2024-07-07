@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RETRIES=5
+RETRIES=50
 
 for i in $(seq 1 $RETRIES); do
     apt install -y "$@" && break || {
