@@ -5,6 +5,8 @@ on:
       - dev
       - main
       - openkylin
+    tags:
+      - 'kernel*'
   workflow_dispatch:
 env:
   KERNEL_VERSION: linux-6.9.8
