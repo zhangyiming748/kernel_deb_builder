@@ -1,4 +1,4 @@
-name: Build kernel deb packages shell
+name: release kernel package
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    name: Build kernel by shell
+    name: release kernel package
     runs-on: ubuntu-latest
     steps:
       - name: wget kernel
