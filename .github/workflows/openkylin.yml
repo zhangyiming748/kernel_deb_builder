@@ -71,7 +71,7 @@ jobs:
           make olddefconfig
           scripts/config --disable DEBUG_INFO
           scripts/config --enable MODULE_COMPRESS
-          make CCACHE_DISABLE=1 deb-pkg -j
+          make CCACHE_DISABLE=1 deb-pkg -j8
       - name: move deb packages to artifact dir
         run: |
           mkdir ${{ github.workspace }}/artifact
@@ -82,11 +82,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: artifact
-          path: ${{ github.workspace }}/artifact
+          files: |
+            *.deb
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ${{ github.workspace }}/artifact.tar
+            *.deb
           tag_name: openkylin
           name: kernel
