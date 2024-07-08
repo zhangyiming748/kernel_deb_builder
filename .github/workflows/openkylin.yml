@@ -23,7 +23,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: stable
-      - name: go run replace.go
+      - name: Generate config
+        run: go run replace.go
       - name: saveSpace
         run: rm -rf /opt/hostedtoolcache
       - name: add deb-src to sources.list
