@@ -13,39 +13,37 @@ func main() {
 	origin_config := readByLine("config")
 	new_config := []string{}
 	for _, line := range origin_config {
-		//log.Printf("第%d行%s\n", i, line)
-		var disable = line
 		if strings.HasPrefix(line, "CONFIG_R8169") {
-			aim := strings.Split(line, "=")
-			k := aim[0]
-			v := aim[1]
-			log.Printf("原始值%v is %v\n", k, v)
-			disable = strings.Join([]string{k, "n"}, "=")
-			log.Printf("修改后:%v\n", disable)
+			log.Printf("找到不需要的配置%s", line)
+			continue
 		}
 		if strings.HasPrefix(line, "CONFIG_DRM_AMDGPU") {
-			aim := strings.Split(line, "=")
-			k := aim[0]
-			v := aim[1]
-			log.Printf("原始值%v=%v\n", k, v)
-			disable = strings.Join([]string{k, "n"}, "=")
+			log.Printf("找到不需要的配置%s", line)
+			continue
 		}
-		if strings.HasPrefix(line, "CONFIG_MLX4_EN") || strings.HasPrefix(line, "CONFIG_MLX5_CORE") {
-			aim := strings.Split(line, "=")
-			k := aim[0]
-			v := aim[1]
-			log.Printf("原始值%v=%v\n", k, v)
-			disable = strings.Join([]string{k, "n"}, "=")
+		if strings.HasPrefix(line, "CONFIG_MLX4") || strings.HasPrefix(line, "CONFIG_MLX5") {
+			log.Printf("找到不需要的配置%s", line)
+			continue
 		}
 		if strings.HasPrefix(line, "CONFIG_ATH") {
-			aim := strings.Split(line, "=")
-			k := aim[0]
-			v := aim[1]
-			log.Printf("原始值%v=%v\n", k, v)
-			disable = strings.Join([]string{k, "n"}, "=")
+			log.Printf("找到不需要的配置%s", line)
+			continue
 		}
 		//log.Println(new_config)
+		//log.Printf("第%d行%s\n", i, line)
 		new_config = append(new_config, line)
+	}
+	if _, err := os.Stat("smartConfig"); err == nil {
+		// 文件存在，删除文件
+		err := os.Remove("smartConfig")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("File deleted successfully.")
+	} else if os.IsNotExist(err) {
+		fmt.Println("File does not exist.")
+	} else {
+		panic(err)
 	}
 	WriteByLine("smartConfig", new_config)
 }
@@ -70,7 +68,7 @@ func readByLine(fp string) []string {
 	return lines
 }
 func WriteByLine(fp string, s []string) {
-	file, err := os.OpenFile(fp, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
+	file, err := os.OpenFile(fp, os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		return
 	}

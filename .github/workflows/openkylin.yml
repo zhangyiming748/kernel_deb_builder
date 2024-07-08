@@ -17,20 +17,15 @@ jobs:
     container:
       image: ubuntu:focal
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
-      - name: saveSpace
-        run: rm -rf /opt/hostedtoolcache
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: go run replace.go
+      - name: saveSpace
+        run: rm -rf /opt/hostedtoolcache
       - name: add deb-src to sources.list
         run: |
           cat /etc/apt/sources.list
