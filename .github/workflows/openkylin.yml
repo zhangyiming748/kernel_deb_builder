@@ -27,7 +27,7 @@ jobs:
         run: |
           ls -al
           pwd
-          go run ${{ github.workspace }}/replace.go
+          go run main.go
       - name: saveSpace
         run: rm -rf /opt/hostedtoolcache
       - name: add deb-src to sources.list
