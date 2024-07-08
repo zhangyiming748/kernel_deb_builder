@@ -55,7 +55,7 @@ jobs:
       - name: copy config file
         run: |
           pwd
-          cp config ${{ env.KERNEL_VERSION }}/.config
+          cp smartConfig ${{ env.KERNEL_VERSION }}/.config
       - name: make git
         run: |
           cd ${{ env.KERNEL_VERSION }}
