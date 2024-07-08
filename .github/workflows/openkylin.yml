@@ -24,7 +24,10 @@ jobs:
         with:
           go-version: stable
       - name: Generate config
-        run: go run replace.go
+        run: |
+          ls -al
+          pwd
+          go run replace.go
       - name: saveSpace
         run: rm -rf /opt/hostedtoolcache
       - name: add deb-src to sources.list
